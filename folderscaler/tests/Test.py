@@ -1,11 +1,15 @@
-from lib.Scaler import Scaler
-
+from folderscaler.scaler.scaler import Scaler
+from folderscaler.utils import util
+from os import getcwd
 
 def test():
+    s = Scaler(r'/home/tal/Documents/')
+    results = s.scale()
 
-    scaler = Scaler()
+    for i in results.items():
+        print(i)
 
-    scaler.test()
+
 
 
 if __name__ == '__main__':
