@@ -1,45 +1,53 @@
+from os import getcwd
+from sys import exc_info
+import csv
+import math
 from pathlib import Path
 
 
-def convert_bytes(num):
+def convert_bytes(size):
     """
     This method will convert bytes to MB & GB
     """
-    for x in ['MB', 'GB']:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-        num /= 1024.0
+    if (size == 0):
+        return '0B'
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size, 1024)))
+    p = math.pow(1024, i)
+    s = round(size / p, 2)
+    return '%s %s' % (s, size_name[i])
 
 
-def convert_to_csv(sizedict, csvpath=Path('.')):
+def convert_results_to_csv(sizedict, csvpath=getcwd()):
     """
            convert_to_csv(dict, pathlib.posixPath) -> None
 
-           This method gets a dictionary of file paths and their sizes in MB and GB, and converts it into a csv file
+           This method gets a dictionary of file paths and their sizes,
+           formats them in MB and GB, and converts it into a csv file
            which is saved into the current directory by default
 
-           @param sizedict: a dictionary of file paths and their sizes in MB and GB.
+           @param sizedict: a dictionary of file paths and their sizes.
 
            @param csvpath: a posixpath object describing where to output the csv file
 
            @return None
     """
-    with open('{}\\temp.csv'.format(csvpath), 'w', newline='') as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow(["Size in MB", "Size in GB", "Path"])
-        for path, size in sizedict.items():
-            writer.writerow([size, path])
+    newdict = {}
 
+    for item in sizedict.items():
+        newdict[item[0]] = convert_bytes(item[1])
 
-def get_file_size(filepath=Path.home()):
-    """
-    get_file_size(string) -> string
+    try:
+        with open(r'{}/folderscaler.csv'.format(csvpath), 'w', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(["Path", "Size"])
 
-    this method will calculate a file size in MB & GB and returns the sizes in a string
+            for filepath, size in newdict.items():
+                writer.writerow([filepath, size])
 
-    @param filepath: a string containing a path to the file
-
-    @return string
-    """
-    file = Path("{}".format(filepath))
-    return self.convert_bytes(file.stat().st_size)
+    except PermissionError:
+        print("ERROR: Permission denied for path '{}'."
+              " Run this program with higher permissions and try again.".format(csvpath))
+    except:
+        print("Unexpected error:", exc_info()[1])
+        raise

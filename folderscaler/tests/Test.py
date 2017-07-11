@@ -6,8 +6,7 @@ def test():
     s = Scaler(r'/home/tal/Documents/')
     results = s.scale()
 
-    for i in results.items():
-        print(i)
+    util.convert_results_to_csv(results)
 
 
 

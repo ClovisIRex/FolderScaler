@@ -1,23 +1,35 @@
-from pathlib import Path
-
 from sys import exc_info
-try:
-    from os import walk, path
-except ImportError:
-    from scandir import scandir, walk
-import csv
 from operator import itemgetter
 from collections import OrderedDict
+from os import path
+
+try:
+    from os import walk
+except ImportError:
+    from scandir import scandir, walk
+
 
 
 class Scaler:
+    """
+        A class for scaling files and directories in a given path.
+
+        @param path: (string)  describing a path on the file system to scale.
+    """
 
     def __init__(self, path):
         self.path = path
 
-
-
     def scale(self):
+
+        """
+               scale(self) -> OrderedDict
+
+               This method performs a walk over the class instance's path,
+               and returns all the files in that path sorted by their size in a dictionary.
+
+               @return OrderedDict
+        """
         start_path = self.path
         results = {}
         total_size = 0
