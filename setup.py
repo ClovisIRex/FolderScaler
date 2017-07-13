@@ -2,9 +2,9 @@ from setuptools import  setup
 
 
 setup(
-    name='FolderScaler',
+    name='Fscaler',
     version= '1.0',
-    py_modules=['folderscaler/scaler/scaler'],
+    py_modules=['fscaler/scaler/scaler'],
     install_requires=[
         'Click', 'scandir',
     ],

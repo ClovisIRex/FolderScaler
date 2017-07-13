@@ -38,7 +38,7 @@ def convert_results_to_csv(sizedict, csvpath=getcwd()):
         newdict[item[0]] = convert_bytes(item[1])
 
     try:
-        with open(r'{}/folderscaler.csv'.format(csvpath), 'w', newline='') as csv_file:
+        with open(r'{}/fscaler.csv'.format(csvpath), 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(["Path", "Size"])
 
