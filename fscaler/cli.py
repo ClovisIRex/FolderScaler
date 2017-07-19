@@ -3,44 +3,19 @@
 
 import click
 from fscaler.scaler import scaler
+from os.path import expanduser
+
+
+home = expanduser("~")
+
 
 @click.command()
-def main():
-    click.echo("""
-    ╬═╬ ███████╗███████╗ ██████╗ █████╗ ██╗     ███████╗██████╗  ╬═╬
-    ╬═╬ ██╔════╝██╔════╝██╔════╝██╔══██╗██║     ██╔════╝██╔══██╗ ╬═╬
-    ╬═╬ █████╗  ███████╗██║     ███████║██║     █████╗  ██████╔╝ ╬═╬
-    ╬═╬ ██╔══╝  ╚════██║██║     ██╔══██║██║     ██╔══╝  ██╔══██╗ ╬═╬
-    ╬═╬ ██║     ███████║╚██████╗██║  ██║███████╗███████╗██║  ██║ ╬═╬
-    ╬═╬ ╚═╝     ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ ╬═╬  
-                                                                                                              
-                                                                                                              
-    fscaler - A small utility which helps you find what's taking the most space in your system.
-        
-        Usage: fscaler
-               fscaler <options> [...]
-               fscaler --help
-               fscaler --version
-        
-        Options:
-        
-          -p --path                         Runs on a specific folder's path (default is user's home directory)
-        
-          -o --out                          Specifies a folder path for .csv file output (default is to print to stdout)
-        
-          -h --help                         Show this screen
-        
-          --version                         Show version
-        
-        Examples:
-          fscaler --path "<Path_to_Folder>" --out "<Path_to_Output_Folder>"
-        
-        
-        Help:
-          This tool runs over your file system and may require some permissions.
-          For help using this tool, please open an issue on the Github repository:
-          https://github.com/ClovisIRex/Fscaler
-    """)
+@click.option('-h','--help', is_flag=True)
+@click.option('-p','--path', default=home)
+@click.option('-o','--out', type=click.File('w'), default='-')
+@click.version_option()
+def cli(help, path, out):
+
 
 if __name__ == '__main__':
-    main()
+    cli()
