@@ -1,10 +1,11 @@
-from os import getcwd
-from sys import exc_info
-from tabulate import tabulate
 import csv
 import math
-from pathlib import Path
-from click import echo, echo_via_pager, progressbar, secho
+from os import getcwd
+from sys import exc_info
+from click import echo_via_pager, progressbar, secho, format_filename, echo
+from tabulate import tabulate
+
+
 
 
 def convert_bytes(size):
@@ -40,7 +41,7 @@ def convert_results(sizedict, csvpath=getcwd(), isCsv = False):
     newdict = {}
 
     for item in sizedict.items():
-        newdict[item[0]] = convert_bytes(item[1])
+        newdict['%-12s' % format_filename(item[0])] = '%-12s' % convert_bytes(item[1])
 
     try:
         if isCsv:
@@ -55,7 +56,9 @@ def convert_results(sizedict, csvpath=getcwd(), isCsv = False):
             secho("csv output was saved in path: {}".format(csvpath), bold=True, fg="green")
         else:
             secho("Preapring output...",bold=True, fg="yellow")
-            echo_via_pager(tabulate(newdict.items(), headers=['Path', 'Size']))
+
+            echo_via_pager(tabulate(newdict.items()))
+
 
 
     except PermissionError:
