@@ -38,7 +38,7 @@ $ pip install .
         
           -o --out                          Specifies a folder path for .csv file output (default is to print to stdout)
         
-          -h --help                         Show help
+          --help                         Show help
         
           --version                         Show version
         

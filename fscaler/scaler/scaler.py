@@ -2,6 +2,8 @@ from sys import exc_info
 from operator import itemgetter
 from collections import OrderedDict
 from os import path
+from pathlib import Path
+from click import echo, progressbar, format_filename, secho
 
 try:
     from os import walk
@@ -14,7 +16,7 @@ class Scaler:
     """
         A class for scaling files and directories in a given path.
 
-        @param path: (string)  describing a path on the file system to scale.
+        :param path: (string)  describing a path on the file system to scale.
     """
 
     def __init__(self, path):
@@ -28,39 +30,44 @@ class Scaler:
                This method performs a walk over the class instance's path,
                and returns all the files in that path sorted by their size in a dictionary.
 
-               @return OrderedDict
+               :return OrderedDict
         """
-        start_path = self.path
+        try:
+            start_path = self.path
+
+        except FileNotFoundError:
+            secho("ERROR: Path '{}' cannot be found on the system. Check for typos and try again.".format(start_path), fg='red', bold=True)
+            exit()
+
         results = {}
         total_size = 0
 
         try:
             for root, dirs, files in walk(start_path):
-                try:
-                    for file in files:
+                for file in files:
 
-                        full_file_path = path.join(root, file)
+                    full_file_path = path.join(root, file)
 
+                    try:
                         file_size = path.getsize(full_file_path)
 
-                        results[full_file_path] = file_size
-                except:
-                    print("Unexpected error:", exc_info()[1])
-                    raise
+                    except FileNotFoundError:
+                        continue
+
+                    results[full_file_path] = file_size
+
 
             results_ordered = OrderedDict(sorted(results.items(), key=itemgetter(1), reverse=True))
 
             return results_ordered
 
-        except FileNotFoundError:
-            print("ERROR: Path '{}' cannot be found on the system. Check for typos and try again.".format(start_path))
-
         except PermissionError:
-            print("ERROR: Permission denied for path '{}'."
-                  " Run this program with higher permissions and try again.".format(start_path))
+            secho("ERROR: Permission denied for path '{}'."
+                  " Run this program with higher permissions and try again.".format(start_path), fg='red', bold=True)
+            exit()
         except:
-            print("Unexpected error:", exc_info()[1])
-            raise
+            secho("Unexpected error:", exc_info()[1], fg='red', bold=True)
+            exit()
 
 
 
