@@ -15,6 +15,7 @@
                                                                                                               
                                                                                                               
 Fscaler is a small utility which helps you find what's taking the most space in your system.
+I actually made it to learn Python packaging and cli tooling.
     
 ## Why not just use du or some GUI tool? 
 Mainly because I wanted to make something neat of my own which also works on Windows and exports a csv file.
